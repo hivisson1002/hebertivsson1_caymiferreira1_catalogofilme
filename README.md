@@ -45,6 +45,7 @@ npm start
 ## 📁 Estrutura
 
 \`\`\`
+
 catalogo-filmes/
 ├── app.js              # Arquivo principal
 ├── config/
@@ -62,6 +63,7 @@ catalogo-filmes/
 │   ├── css/           # Estilos
 │   └── js/            # Scripts
 └── scripts/           # Scripts SQL
+
 \`\`\`
 
 ## 🎯 Funcionalidades
@@ -95,3 +97,7 @@ catalogo-filmes/
 - **Validação**: Sequelize + JavaScript
 
 Sistema simples e funcional para gerenciar catálogo de filmes! 🎬
+
+## Dupla de Desenvolvedores
+| |  [<img src="https://avatars.githubusercontent.com/hivisson1002?v=4" width=115><br><sub>Hebert Ivisson</sub>](https://github.com/hivisson1002) |  [<img src="https://avatars.githubusercontent.com/caymiferreira?v=4" width=115><br><sub>Caymi Ferreira</sub>](https://github.com/caymiferreira) | |
+| :---: | :---: | :---: | :---: |
