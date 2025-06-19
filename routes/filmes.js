@@ -60,7 +60,6 @@ router.post("/filmes", async (req, res) => {
 
     console.log("💾 Preparando dados para o banco...")
 
-    // Processar nota corretamente
     let notaProcessada = null
     if (req.body.nota && req.body.nota.trim() !== "") {
       const notaValue = Number.parseFloat(req.body.nota)
@@ -212,7 +211,6 @@ router.delete("/filmes/:id", async (req, res) => {
     await filme.destroy()
     console.log("✅ Filme deletado com sucesso")
 
-    // Responder de acordo com o tipo de requisição
     if (req.xhr || req.headers.accept?.includes("application/json")) {
       return res.json({ sucesso: true, mensagem: "Filme excluído com sucesso" })
     } else {
