@@ -1,0 +1,46 @@
+<div class="card h-100">
+    <div class="card-body">
+        <h5 class="card-title">
+            <i class="fas fa-film text-primary me-2"></i>
+            <%= filme.titulo %>
+        </h5>
+        <h6 class="card-subtitle mb-3 text-muted">
+            <i class="fas fa-user-tie me-1"></i>
+            <%= filme.diretor %> • <i class="fas fa-calendar me-1"></i><%= filme.ano %>
+        </h6>
+        <div class="mb-3">
+            <span class="badge bg-primary me-2">
+                <i class="fas fa-tags me-1"></i><%= filme.genero %>
+            </span>
+            <span class="badge bg-secondary me-2">
+                <i class="fas fa-clock me-1"></i><%= filme.duracao %> min
+            </span>
+            <% if (filme.nota) { %>
+                <span class="badge bg-warning">
+                    <i class="fas fa-star me-1"></i><%= filme.nota %>/10
+                </span>
+            <% } %>
+        </div>
+        <% if (filme.sinopse) { %>
+            <p class="card-text">
+                <%= filme.sinopse.length > 120 ? filme.sinopse.substring(0, 120) + '...' : filme.sinopse %>
+            </p>
+        <% } %>
+    </div>
+    <div class="card-footer">
+        <div class="btn-group w-100">
+            <a href="/filmes/<%= filme.id %>" class="btn btn-outline-primary btn-sm">
+                <i class="fas fa-eye me-1"></i>Ver
+            </a>
+            <a href="/filmes/<%= filme.id %>/editar" class="btn btn-outline-warning btn-sm">
+                <i class="fas fa-edit me-1"></i>Editar
+            </a>
+            <form method="POST" action="/filmes/<%= filme.id %>?_method=DELETE" class="d-inline" 
+                  onsubmit="return confirm('Tem certeza que deseja excluir este filme?')">
+                <button type="submit" class="btn btn-outline-danger btn-sm">
+                    <i class="fas fa-trash me-1"></i>Excluir
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

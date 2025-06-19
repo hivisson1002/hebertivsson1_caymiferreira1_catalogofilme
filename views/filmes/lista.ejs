@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todos os Filmes - Catálogo de Filmes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="/css/estilo.css" rel="stylesheet">
+</head>
+<body>
+    <%- include('../partials/cabecalho') %>
+
+    <!-- Espaçamento para navbar fixa -->
+    <div style="height: 80px;"></div>
+
+    <div class="container">
+        <!-- Header da página -->
+        <div class="content-section fade-in-up">
+            <div class="row align-items-center mb-4">
+                <div class="col-md-8">
+                    <h1 class="section-title">
+                        <i class="fas fa-list me-3"></i>
+                        Todos os Filmes
+                    </h1>
+                    <p class="text-muted mb-0">
+                        <i class="fas fa-film me-1"></i>
+                        <%= filmes ? filmes.length : 0 %> filme<%= filmes && filmes.length !== 1 ? 's' : '' %> em sua coleção
+                    </p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <a href="/filmes/novo" class="btn btn-primary btn-lg">
+                        <i class="fas fa-plus me-2"></i>
+                        Adicionar Filme
+                    </a>
+                </div>
+            </div>
+
+            <!-- Filtros e busca -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="fas fa-search"></i>
+                        </span>
+                        <input type="text" 
+                               class="form-control" 
+                               id="buscarFilme" 
+                               placeholder="Buscar por título, diretor ou gênero...">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" id="filtroGenero">
+                        <option value="">Todos os gêneros</option>
+                        <option value="Ação">🎬 Ação</option>
+                        <option value="Aventura">🗺️ Aventura</option>
+                        <option value="Comédia">😄 Comédia</option>
+                        <option value="Drama">🎭 Drama</option>
+                        <option value="Ficção Científica">🚀 Ficção Científica</option>
+                        <option value="Horror">👻 Horror</option>
+                        <option value="Romance">💕 Romance</option>
+                        <option value="Suspense">🔍 Suspense</option>
+                        <option value="Documentário">📚 Documentário</option>
+                        <option value="Animação">🎨 Animação</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" id="ordenacao">
+                        <option value="titulo">Ordenar por Título</option>
+                        <option value="ano">Ordenar por Ano</option>
+                        <option value="diretor">Ordenar por Diretor</option>
+                        <option value="nota">Ordenar por Nota</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <% if (typeof erro !== 'undefined') { %>
+            <div class="alert alert-danger fade-in-up">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <strong>Erro!</strong> <%= erro %>
+            </div>
+        <% } %>
+        
+        <% if (filmes && filmes.length > 0) { %>
+            <div class="row" id="listaFilmes">
+                <% filmes.forEach((filme, index) => { %>
+                    <div class="col-lg-4 col-md-6 mb-4 filme-item fade-in-up" 
+                         style="animation-delay: <%= index * 0.1 %>s;"
+                         data-titulo="<%= filme.titulo.toLowerCase() %>"
+                         data-diretor="<%= filme.diretor.toLowerCase() %>"
+                         data-genero="<%= filme.genero %>"
+                         data-ano="<%= filme.ano %>"
+                         data-nota="<%= filme.nota || 0 %>">
+                        <%- include('../partials/card-filme', { filme: filme }) %>
+                    </div>
+                <% }) %>
+            </div>
+
+            <!-- Estatísticas -->
+            <div class="content-section mt-5 fade-in-up">
+                <h3 class="mb-4">
+                    <i class="fas fa-chart-bar me-2"></i>
+                    Estatísticas da Coleção
+                </h3>
+                <div class="row text-center">
+                    <div class="col-md-3 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <i class="fas fa-film fa-2x text-primary mb-2"></i>
+                                <h4 class="gradient-text"><%= filmes.length %></h4>
+                                <p class="text-muted mb-0">Total de Filmes</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <i class="fas fa-clock fa-2x text-success mb-2"></i>
+                                <h4 class="gradient-text">
+                                    <%= Math.round(filmes.reduce((acc, f) => acc + f.duracao, 0) / 60) %>h
+                                </h4>
+                                <p class="text-muted mb-0">Tempo Total</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <i class="fas fa-star fa-2x text-warning mb-2"></i>
+                                <h4 class="gradient-text">
+                                    <%= filmes.filter(f => f.nota).length > 0 ? 
+                                        (filmes.filter(f => f.nota).reduce((acc, f) => acc + f.nota, 0) / filmes.filter(f => f.nota).length).toFixed(1) : 
+                                        'N/A' %>
+                                </h4>
+                                <p class="text-muted mb-0">Nota Média</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <i class="fas fa-calendar fa-2x text-info mb-2"></i>
+                                <h4 class="gradient-text">
+                                    <%= new Date().getFullYear() - Math.min(...filmes.map(f => f.ano)) + 1 %>
+                                </h4>
+                                <p class="text-muted mb-0">Anos de Cinema</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% } else { %>
+            <div class="empty-state fade-in-up">
+                <i class="fas fa-film fa-4x text-muted mb-4"></i>
+                <h3 class="text-muted mb-3">Sua coleção está vazia</h3>
+                <p class="text-muted mb-4">Que tal adicionar o primeiro filme ao seu catálogo?</p>
+                <a href="/filmes/novo" class="btn btn-primary btn-lg pulse">
+                    <i class="fas fa-plus me-2"></i>
+                    Adicionar Primeiro Filme
+                </a>
+            </div>
+        <% } %>
+    </div>
+
+    <%- include('../partials/rodape') %>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/script.js"></script>
+    
+    <script>
+        // Funcionalidade de busca e filtros
+        document.addEventListener('DOMContentLoaded', function() {
+            const buscarInput = document.getElementById('buscarFilme');
+            const filtroGenero = document.getElementById('filtroGenero');
+            const ordenacao = document.getElementById('ordenacao');
+            const filmeItems = document.querySelectorAll('.filme-item');
+
+            function filtrarFilmes() {
+                const termoBusca = buscarInput.value.toLowerCase();
+                const generoSelecionado = filtroGenero.value;
+                
+                filmeItems.forEach(item => {
+                    const titulo = item.dataset.titulo;
+                    const diretor = item.dataset.diretor;
+                    const genero = item.dataset.genero;
+                    
+                    const matchBusca = titulo.includes(termoBusca) || diretor.includes(termoBusca);
+                    const matchGenero = !generoSelecionado || genero === generoSelecionado;
+                    
+                    if (matchBusca && matchGenero) {
+                        item.style.display = 'block';
+                        item.classList.add('fade-in-up');
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            }
+
+            function ordenarFilmes() {
+                const container = document.getElementById('listaFilmes');
+                const items = Array.from(filmeItems);
+                const criterio = ordenacao.value;
+                
+                items.sort((a, b) => {
+                    let valorA, valorB;
+                    
+                    switch(criterio) {
+                        case 'ano':
+                            valorA = parseInt(a.dataset.ano);
+                            valorB = parseInt(b.dataset.ano);
+                            return valorB - valorA; // Mais recente primeiro
+                        case 'diretor':
+                            valorA = a.dataset.diretor;
+                            valorB = b.dataset.diretor;
+                            return valorA.localeCompare(valorB);
+                        case 'nota':
+                            valorA = parseFloat(a.dataset.nota) || 0;
+                            valorB = parseFloat(b.dataset.nota) || 0;
+                            return valorB - valorA; // Maior nota primeiro
+                        default: // titulo
+                            valorA = a.dataset.titulo;
+                            valorB = b.dataset.titulo;
+                            return valorA.localeCompare(valorB);
+                    }
+                });
+                
+                items.forEach(item => container.appendChild(item));
+            }
+
+            buscarInput.addEventListener('input', filtrarFilmes);
+            filtroGenero.addEventListener('change', filtrarFilmes);
+            ordenacao.addEventListener('change', ordenarFilmes);
+        });
+    </script>
+</body>
+</html>

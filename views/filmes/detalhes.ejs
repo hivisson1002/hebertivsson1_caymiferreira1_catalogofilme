@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= filme.titulo %> - Catálogo de Filmes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="/css/estilo.css" rel="stylesheet">
+</head>
+<body>
+    <%- include('../partials/cabecalho') %>
+
+    <!-- Espaçamento para navbar fixa -->
+    <div style="height: 80px;"></div>
+
+    <div class="container">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="fade-in-up">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Início</a></li>
+                <li class="breadcrumb-item"><a href="/filmes">Filmes</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><%= filme.titulo %></li>
+            </ol>
+        </nav>
+
+        <div class="row">
+            <!-- Conteúdo principal -->
+            <div class="col-lg-8">
+                <div class="content-section fade-in-up">
+                    <!-- Header do filme -->
+                    <div class="text-center mb-5">
+                        <h1 class="section-title mb-3">
+                            <i class="fas fa-film me-3"></i>
+                            <%= filme.titulo %>
+                        </h1>
+                        <div class="d-flex justify-content-center flex-wrap gap-3 mb-3">
+                            <span class="badge bg-primary fs-6">
+                                <i class="fas fa-calendar me-1"></i><%= filme.ano %>
+                            </span>
+                            <span class="badge bg-success fs-6">
+                                <i class="fas fa-tags me-1"></i><%= filme.genero %>
+                            </span>
+                            <span class="badge bg-info fs-6">
+                                <i class="fas fa-clock me-1"></i><%= filme.duracao %> min
+                            </span>
+                            <% if (filme.nota) { %>
+                                <span class="badge bg-warning fs-6">
+                                    <i class="fas fa-star me-1"></i><%= filme.nota %>/10
+                                </span>
+                            <% } %>
+                        </div>
+                        <p class="lead text-muted">
+                            <i class="fas fa-user-tie me-2"></i>
+                            Dirigido por <strong><%= filme.diretor %></strong>
+                        </p>
+                    </div>
+
+                    <!-- Informações detalhadas -->
+                    <div class="row mb-5">
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-user-tie fa-3x text-primary mb-3"></i>
+                                    <h5 class="card-title">Diretor</h5>
+                                    <p class="card-text fs-5"><%= filme.diretor %></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-calendar fa-3x text-success mb-3"></i>
+                                    <h5 class="card-title">Ano de Lançamento</h5>
+                                    <p class="card-text fs-5"><%= filme.ano %></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-tags fa-3x text-info mb-3"></i>
+                                    <h5 class="card-title">Gênero</h5>
+                                    <p class="card-text fs-5"><%= filme.genero %></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-clock fa-3x text-warning mb-3"></i>
+                                    <h5 class="card-title">Duração</h5>
+                                    <p class="card-text fs-5">
+                                        <%= filme.duracao %> minutos
+                                        <small class="text-muted d-block">
+                                            (<%= Math.floor(filme.duracao / 60) %>h <%= filme.duracao % 60 %>min)
+                                        </small>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sinopse -->
+                    <% if (filme.sinopse) { %>
+                        <div class="mb-5">
+                            <h3 class="mb-4">
+                                <i class="fas fa-align-left me-2"></i>
+                                Sinopse
+                            </h3>
+                            <div class="card">
+                                <div class="card-body">
+                                    <p class="card-text fs-6 lh-lg"><%= filme.sinopse %></p>
+                                </div>
+                            </div>
+                        </div>
+                    <% } %>
+
+                    <!-- Avaliação -->
+                    <% if (filme.nota) { %>
+                        <div class="mb-5">
+                            <h3 class="mb-4">
+                                <i class="fas fa-star me-2"></i>
+                                Avaliação
+                            </h3>
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <div class="display-4 gradient-text mb-3">
+                                        <%= filme.nota %>/10
+                                    </div>
+                                    <div class="mb-3">
+                                        <% for(let i = 1; i <= 10; i++) { %>
+                                            <i class="fas fa-star <%= i <= Math.round(filme.nota) ? 'text-warning' : 'text-muted' %>"></i>
+                                        <% } %>
+                                    </div>
+                                    <p class="text-muted">
+                                        <% if (filme.nota >= 9) { %>
+                                            🏆 Obra-prima
+                                        <% } else if (filme.nota >= 8) { %>
+                                            ⭐ Excelente
+                                        <% } else if (filme.nota >= 7) { %>
+                                            👍 Muito bom
+                                        <% } else if (filme.nota >= 6) { %>
+                                            👌 Bom
+                                        <% } else if (filme.nota >= 5) { %>
+                                            😐 Regular
+                                        <% } else { %>
+                                            👎 Fraco
+                                        <% } %>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    <% } %>
+
+                    <!-- Ações -->
+                    <div class="text-center">
+                        <div class="btn-group-vertical btn-group-lg d-md-none mb-3">
+                            <a href="/filmes" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Voltar aos Filmes
+                            </a>
+                            <a href="/filmes/<%= filme.id %>/editar" class="btn btn-warning">
+                                <i class="fas fa-edit me-2"></i>Editar Filme
+                            </a>
+                            <button type="button" class="btn btn-danger" onclick="confirmarExclusao()">
+                                <i class="fas fa-trash me-2"></i>Excluir Filme
+                            </button>
+                        </div>
+                        
+                        <div class="btn-group d-none d-md-flex">
+                            <a href="/filmes" class="btn btn-outline-secondary btn-lg">
+                                <i class="fas fa-arrow-left me-2"></i>Voltar aos Filmes
+                            </a>
+                            <a href="/filmes/<%= filme.id %>/editar" class="btn btn-warning btn-lg">
+                                <i class="fas fa-edit me-2"></i>Editar Filme
+                            </a>
+                            <button type="button" class="btn btn-danger btn-lg" onclick="confirmarExclusao()">
+                                <i class="fas fa-trash me-2"></i>Excluir Filme
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <div class="content-section fade-in-up" style="animation-delay: 0.2s;">
+                    <h4 class="mb-4">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Informações Técnicas
+                    </h4>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between">
+                            <strong>ID do Filme:</strong>
+                            <span class="badge bg-secondary">#<%= filme.id %></span>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Adicionado em:</strong><br>
+                            <small class="text-muted">
+                                <i class="fas fa-calendar-plus me-1"></i>
+                                <%= new Date(filme.created_at).toLocaleDateString('pt-BR', {
+                                    weekday: 'long',
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric'
+                                }) %>
+                            </small>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Última atualização:</strong><br>
+                            <small class="text-muted">
+                                <i class="fas fa-edit me-1"></i>
+                                <%= new Date(filme.updated_at).toLocaleDateString('pt-BR', {
+                                    weekday: 'long',
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric'
+                                }) %>
+                            </small>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Ações rápidas -->
+                <div class="content-section fade-in-up mt-4" style="animation-delay: 0.4s;">
+                    <h5 class="mb-3">
+                        <i class="fas fa-bolt me-2"></i>
+                        Ações Rápidas
+                    </h5>
+                    <div class="d-grid gap-2">
+                        <a href="/filmes/novo" class="btn btn-outline-primary">
+                            <i class="fas fa-plus me-2"></i>Adicionar Novo Filme
+                        </a>
+                        <a href="/filmes" class="btn btn-outline-info">
+                            <i class="fas fa-list me-2"></i>Ver Todos os Filmes
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de confirmação de exclusão -->
+    <div class="modal fade" id="modalExclusao" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Confirmar Exclusão
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-3">Tem certeza que deseja excluir o filme:</p>
+                    <div class="alert alert-warning">
+                        <strong><%= filme.titulo %></strong> (<%= filme.ano %>)
+                    </div>
+                    <p class="text-danger">
+                        <i class="fas fa-exclamation-triangle me-1"></i>
+                        Esta ação não pode ser desfeita!
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-1"></i>Cancelar
+                    </button>
+                    <form method="POST" action="/filmes/<%= filme.id %>?_method=DELETE" class="d-inline">
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash me-1"></i>Sim, Excluir
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%- include('../partials/rodape') %>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/script.js"></script>
+    
+    <script>
+        function confirmarExclusao() {
+            const modal = new bootstrap.Modal(document.getElementById('modalExclusao'));
+            modal.show();
+        }
+    </script>
+</body>
+</html>
