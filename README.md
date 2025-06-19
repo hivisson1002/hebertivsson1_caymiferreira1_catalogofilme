@@ -45,6 +45,7 @@ npm start
 ## 📁 Estrutura
 
 \`\`\`
+
 catalogo-filmes/
 ├── app.js              # Arquivo principal
 ├── config/
@@ -62,6 +63,7 @@ catalogo-filmes/
 │   ├── css/           # Estilos
 │   └── js/            # Scripts
 └── scripts/           # Scripts SQL
+
 \`\`\`
 
 ## 🎯 Funcionalidades
